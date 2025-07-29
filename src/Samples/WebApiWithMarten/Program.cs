@@ -16,6 +16,11 @@ builder.Services.AddMarten(opts =>
             .Configuration
             .GetConnectionString("postgres");
 
+        opts.AutoCreateSchemaObjects = AutoCreate.None;
+        // opts.AutoCreateSchemaObjects = AutoCreate.All;
+
+        opts.Schema.For<Order>();
+        
         opts.Connection(connectionString);
         opts.DatabaseSchemaName = "orders";
     })
@@ -45,6 +50,13 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+app.MapGet("/db", async (IDocumentStore store, HttpContext context)
+    =>
+{
+    await store.Storage.Database.AssertDatabaseMatchesConfigurationAsync();
+    return Results.Ok();
+});
 
 
 app.MapGet("/orders", (IQuerySession session, HttpContext context)

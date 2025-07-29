@@ -1,3 +1,21 @@
+# DB Init bug
+
+### Run docker stack 
+```powershell
+docker-compose up postgresql -d
+```
+
+### Generate script
+> NOTE: This script is only used to compare what the expected schema should be vs what is created / missed at runtime 
+```powershell
+dotnet run --framework net8.0  -- db-patch -d postgresql://localhost/postgres/orders  ./Migrations/2025-07-30T092620_Initial.sql
+```
+
+### Apply
+Run generated script above against localhost
+
+
+
 # WebApiWithMarten
 
 This is a very simple project just showing the usage of Marten with Wolverine in an ASP.Net Core project. To run the
